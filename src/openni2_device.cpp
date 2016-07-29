@@ -529,16 +529,34 @@ void OpenNI2Device::setAutoExposure(bool enable) throw (OpenNI2Exception)
     openni::CameraSettings* camera_seeting = stream->getCameraSettings();
     if (camera_seeting)
     {
-      const openni::Status rc = camera_seeting->setAutoExposureEnabled(false);
+      const openni::Status rc = camera_seeting->setAutoExposureEnabled(enable);
       int exposure = 70;
-      camera_seeting->setExposure(exposure);
-      std::cout << "Exposure set to " << exposure << std::endl;
+      setExposure(exposure);
       if (rc != openni::STATUS_OK)
         THROW_OPENNI_EXCEPTION("Couldn't set auto exposure: \n%s\n", openni::OpenNI::getExtendedError());
     }
 
   }
 }
+
+void OpenNI2Device::setExposure(int value) throw (OpenNI2Exception)
+{
+  boost::shared_ptr<openni::VideoStream> stream = getColorVideoStream();
+
+  if (stream)
+  {
+    openni::CameraSettings* camera_seeting = stream->getCameraSettings();
+    if (camera_seeting)
+    {
+      const openni::Status rc = camera_seeting->setExposure(value);
+      std::cout << "Exposure set to " << value << std::endl;
+      if (rc != openni::STATUS_OK)
+        THROW_OPENNI_EXCEPTION("Couldn't set exposure: \n%s\n", openni::OpenNI::getExtendedError());
+    }
+
+  }
+}
+
 void OpenNI2Device::setAutoWhiteBalance(bool enable) throw (OpenNI2Exception)
 {
   boost::shared_ptr<openni::VideoStream> stream = getColorVideoStream();

@@ -73,7 +73,6 @@ OpenNI2Driver::OpenNI2Driver(ros::NodeHandle& n, ros::NodeHandle& pnh) :
   ROS_DEBUG("Dynamic reconfigure configuration received.");
 
   advertiseROSTopics();
-
 }
 
 void OpenNI2Driver::advertiseROSTopics()
@@ -102,6 +101,7 @@ void OpenNI2Driver::advertiseROSTopics()
     image_transport::SubscriberStatusCallback itssc = boost::bind(&OpenNI2Driver::colorConnectCb, this);
     ros::SubscriberStatusCallback rssc = boost::bind(&OpenNI2Driver::colorConnectCb, this);
     pub_color_ = color_it.advertiseCamera("image", 1, itssc, itssc, rssc, rssc);
+    sub_set_exposure_ = color_nh.subscribe<std_msgs::Int32>("set_exposure", 1, &OpenNI2Driver::set_exposure_cb, this);
   }
 
   if (device_->hasIRSensor())
@@ -912,6 +912,17 @@ sensor_msgs::ImageConstPtr OpenNI2Driver::rawToFloatingPointConversion(sensor_ms
   }
 
   return new_image;
+}
+
+void OpenNI2Driver::set_exposure_cb(const std_msgs::Int32ConstPtr& exposure_msg)
+{
+  if(!device_->hasColorSensor())
+  {
+    std::cout << "Tried to set exposure on device without color sensor. Aborting. " << std::endl;
+    return;
+  }
+
+  device_->setExposure(exposure_msg->data);
 }
 
 }

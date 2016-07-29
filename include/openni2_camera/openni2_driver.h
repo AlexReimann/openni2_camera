@@ -54,6 +54,7 @@
 #include "openni2_camera/GetSerial.h"
 
 #include <ros/ros.h>
+#include <std_msgs/Int32.h>
 
 namespace openni2_wrapper
 {
@@ -104,6 +105,8 @@ private:
   void setColorVideoMode(const OpenNI2VideoMode& color_video_mode);
   void setDepthVideoMode(const OpenNI2VideoMode& depth_video_mode);
 
+  void set_exposure_cb(const std_msgs::Int32ConstPtr& exposure_msg);
+
   ros::NodeHandle& nh_;
   ros::NodeHandle& pnh_;
 
@@ -126,6 +129,7 @@ private:
   image_transport::CameraPublisher pub_depth_raw_;
   image_transport::CameraPublisher pub_ir_;
   ros::Publisher pub_projector_info_;
+  ros::Subscriber sub_set_exposure_;
 
   /** \brief Camera info manager objects. */
   boost::shared_ptr<camera_info_manager::CameraInfoManager> color_info_manager_, ir_info_manager_;

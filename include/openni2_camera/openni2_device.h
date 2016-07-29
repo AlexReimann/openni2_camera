@@ -124,6 +124,7 @@ public:
   float getDepthFocalLength (int output_y_resolution) const;
 
   void setAutoExposure(bool enable) throw (OpenNI2Exception);
+  void setExposure(int value) throw (OpenNI2Exception);
   void setAutoWhiteBalance(bool enable) throw (OpenNI2Exception);
 
   bool getAutoExposure() const;
