@@ -529,7 +529,10 @@ void OpenNI2Device::setAutoExposure(bool enable) throw (OpenNI2Exception)
     openni::CameraSettings* camera_seeting = stream->getCameraSettings();
     if (camera_seeting)
     {
-      const openni::Status rc = camera_seeting->setAutoExposureEnabled(enable);
+      const openni::Status rc = camera_seeting->setAutoExposureEnabled(false);
+      int exposure = 70;
+      camera_seeting->setExposure(exposure);
+      std::cout << "Exposure set to " << exposure << std::endl;
       if (rc != openni::STATUS_OK)
         THROW_OPENNI_EXCEPTION("Couldn't set auto exposure: \n%s\n", openni::OpenNI::getExtendedError());
     }
